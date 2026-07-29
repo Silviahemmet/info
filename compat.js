@@ -70,7 +70,7 @@
   function setWeatherArt(code) {
     var panel = document.querySelector ? document.querySelector('.weather') : null;
     var art = document.querySelector ? document.querySelector('.weather-art') : null;
-    var rainy = isRain(code);
+    var rainy = isLiquidRain(code);
     if (!panel) { return; }
     if (art) {
       if (code === 1 || code === 2) { art.src = 'forecast-partly.png'; }
@@ -104,16 +104,14 @@
 
   function setCurrentWeatherIcon(code) {
     var icon = byId('weather-icon');
-    var sun = '<circle class="sun" cx="50" cy="50" r="17"/><path class="sun" d="M50 10v10M50 80v10M10 50h10M80 50h10M22 22l7 7M71 71l7 7M78 22l-7 7M29 71l-7 7"/>';
-    var cloud = '<path class="cloud" d="M20 71c-9 0-14-6-14-14 0-9 7-16 16-16 3-13 13-21 27-21 15 0 27 11 28 26 10 0 17 6 17 15 0 7-6 12-14 12H20z"/>';
-    var art = sun;
-    if (code === 1 || code === 2) {
-      if (icon) { icon.innerHTML = '<img src="current-partly-transparent.png?v=1" alt="">'; }
-      return;
-    }
-    else if (code === 3 || code === 45 || code === 48) { art = cloud; }
-    else if (isRain(code)) { art = cloud + '<path class="rain" d="M31 77l-5 12M52 77l-5 12M73 77l-5 12"/>'; }
-    if (icon) { icon.innerHTML = '<svg viewBox="0 0 100 110" aria-hidden="true">' + art + '</svg>'; }
+    var file = 'cloudy.png';
+    if (code === 0) { file = 'clear.png'; }
+    else if (code === 1 || code === 2) { file = 'partly.png'; }
+    else if (code === 45 || code === 48) { file = 'fog.png'; }
+    else if ([71, 73, 75, 77, 85, 86].indexOf(code) !== -1) { file = 'snow.png'; }
+    else if ([95, 96, 99].indexOf(code) !== -1) { file = 'thunder.png'; }
+    else if (isLiquidRain(code)) { file = 'rain.png'; }
+    if (icon) { icon.innerHTML = '<img src="current-weather-icons/' + file + '?v=1" alt="">'; }
   }
 
   function loadWeather() {
@@ -135,6 +133,10 @@
 
   function isRain(code) {
     return [51, 53, 55, 61, 63, 65, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99].indexOf(code) !== -1;
+  }
+
+  function isLiquidRain(code) {
+    return [51, 53, 55, 61, 63, 65, 80, 81, 82].indexOf(code) !== -1;
   }
 
   function forecastImage(code) {

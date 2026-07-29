@@ -37,7 +37,7 @@
     .weather > :not(.weather-art):not(.current-rain) { position:relative; z-index:1; }
     .weather-art { display:none; position:absolute; z-index:0; width:140%; max-width:none; left:-20%; bottom:-15%; opacity:.55; pointer-events:none; -webkit-mask-image:radial-gradient(ellipse 67% 60% at 50% 62%,#000 38%,rgba(0,0,0,.8) 58%,transparent 82%); mask-image:radial-gradient(ellipse 67% 60% at 50% 62%,#000 38%,rgba(0,0,0,.8) 58%,transparent 82%); }
     .weather.has-illustration .weather-art, .weather.has-rain .weather-art { display:block; }
-    .weather.has-illustration .weather-icon, .weather.has-rain .weather-icon { visibility:hidden; }
+    .weather.has-illustration .weather-icon, .weather.has-rain .weather-icon { visibility:visible; }
     .current-rain { display:none; position:absolute; top:0; right:0; bottom:0; left:0; z-index:0; overflow:hidden; pointer-events:none; }
     .weather.has-rain .current-rain { display:block; }
     .current-rain .rain-drop { display:block; position:absolute; width:clamp(7px,.55vw,11px); height:clamp(17px,1.3vw,26px); background-image:url('weather-raindrop-sprite.png'); background-position:center; background-size:100% 100%; background-repeat:no-repeat; animation:current-rain-fall 5.5s linear infinite; -webkit-animation:current-rain-fall 5.5s linear infinite; }
@@ -46,9 +46,9 @@
     .current-rain .drop-three { left:68%; top:45%; animation-delay:3.6s; -webkit-animation-delay:3.6s; }
     .weather h1 { margin:0 0 8px; font-size:clamp(24px,2.15vw,42px); }
     .weather .condition { font-size:clamp(18px,1.5vw,28px); opacity:.92; }
-    .reading { display:flex; align-items:center; gap:clamp(10px,1vw,18px); }
+    .reading { position:relative; display:flex; align-items:center; gap:clamp(10px,1vw,18px); }
     .temp { font-size:clamp(56px,5vw,96px); font-weight:700; line-height:.9; letter-spacing:-4px; white-space:nowrap; }
-    .weather-icon { flex:none; width:clamp(56px,4.8vw,92px); height:clamp(56px,4.8vw,92px); filter:drop-shadow(0 5px 7px rgba(0,0,0,.16)); }
+    .weather-icon { position:absolute; z-index:1; right:88%; top:50%; width:clamp(220px,15vw,300px); height:clamp(220px,15vw,300px); transform:translateY(-50%); filter:drop-shadow(0 5px 7px rgba(0,0,0,.16)); pointer-events:none; }
     .weather-icon svg { width:100%; height:100%; overflow:visible; }
     .weather-icon img { display:block; width:100%; height:100%; object-fit:contain; }
     .weather-icon .sun { stroke:#ffe38a; fill:none; stroke-width:5; stroke-linecap:round; }
@@ -191,7 +191,7 @@
     html.no-clamp .weather .condition { font-size:1.5vw; }
     html.no-clamp .reading { gap:1vw; }
     html.no-clamp .temp { font-size:5vw; }
-    html.no-clamp .weather-icon { width:4.8vw; height:4.8vw; }
+    html.no-clamp .weather-icon { width:15vw; height:15vw; }
     html.no-clamp .details { gap:1vw; font-size:1.1vw; }
     html.no-clamp .forecast { padding:.7vw 3vw; }
     html.no-clamp .forecast h2 { font-size:1.45vw; }
@@ -237,7 +237,7 @@
     html.legacy-player .current-rain .rain-drop { width:1.25vw; height:3vw; }
     html.legacy-player .reading { position:absolute!important; z-index:2; left:auto!important; right:2.2vw!important; top:20%!important; bottom:auto!important; width:38%!important; display:block!important; text-align:right!important; }
     html.legacy-player .temp { font-size:5.8vw; line-height:.9; }
-    html.legacy-player .weather-icon { display:block!important; position:absolute; z-index:1; left:-11vw; top:5vw; width:10.5vw; height:10.5vw; opacity:.92; filter:drop-shadow(0 .45vw .65vw rgba(0,0,0,.2)); }
+    html.legacy-player .weather-icon { display:block!important; position:absolute; z-index:1; left:-13.5vw; right:auto; top:-4.2vw; width:16vw; height:16vw; opacity:.96; transform:none; filter:drop-shadow(0 .45vw .65vw rgba(0,0,0,.2)); }
     html.legacy-player .details { position:absolute!important; z-index:2; left:2.2vw!important; top:auto!important; bottom:12%!important; width:82%!important; display:block!important; padding:0!important; font-size:1.18vw; }
     html.legacy-player .details div { display:inline-block; margin-right:1.8vw; }
     html.legacy-player .top .news { width:30.8%; padding:1.7vw 2.3vw 2.3vw; }
@@ -294,7 +294,7 @@
     </section>
     <article class="news panel" aria-label="Nyheter och dagens citat"><div class="news-label"><span id="news-source">Yle</span><small id="news-section">Senaste nyheterna</small></div><div id="headlines"><div class="headline">Hämtar de senaste nyheterna…</div></div></article>
   </main>
-  <script src="compat.js?v=24"></script>
+  <script src="compat.js?v=26"></script>
   <script type="text/plain">
     const weatherCode = {0:'Klart',1:'Mestadels klart',2:'Halvklart',3:'Mulet',45:'Dimma',48:'Rimfrost-dimma',51:'Lätt duggregn',53:'Duggregn',55:'Kraftigt duggregn',61:'Lätt regn',63:'Regn',65:'Kraftigt regn',71:'Lätt snö',73:'Snöfall',75:'Kraftigt snöfall',80:'Regnskurar',81:'Regnskurar',82:'Kraftiga skurar',95:'Åska'};
     function showDate(){ const now=new Date(); document.getElementById('clock').textContent=new Intl.DateTimeFormat('sv-FI',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now); document.getElementById('date').textContent=new Intl.DateTimeFormat('sv-FI',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now); }
